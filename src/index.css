@@ -51,6 +51,15 @@ All colors MUST be HSL.
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.25);
     --shadow-warm: 0 8px 25px -8px hsl(var(--saffron-deep) / 0.3);
 
+    /* Glassmorphism effects */
+    --glass-light: hsl(var(--background) / 0.8);
+    --glass-medium: hsl(var(--background) / 0.6);
+    --glass-dark: hsl(var(--background) / 0.4);
+    
+    /* Navigation */
+    --nav-blur: blur(20px);
+    --border-glass: hsl(var(--foreground) / 0.1);
+
     /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 

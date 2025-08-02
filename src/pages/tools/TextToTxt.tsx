@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { HeroSection } from "@/components/HeroSection";
 import { TextEditor } from "@/components/TextEditor";
-import { FileFormatSelector } from "@/components/FileFormatSelector";
 import { FileNameInput } from "@/components/FileNameInput";
 import { useToast } from "@/hooks/use-toast";
-import { generateFile } from "@/utils/fileGenerator";
+import { generateTxtFile } from "@/utils/fileGenerator";
+import { FileText } from "lucide-react";
 
-const Index = () => {
+const TextToTxt = () => {
   const [textContent, setTextContent] = useState("");
-  const [selectedFormat, setSelectedFormat] = useState("docx");
   const [fileName, setFileName] = useState("");
   const { toast } = useToast();
 
@@ -32,17 +30,17 @@ const Index = () => {
     }
 
     try {
-      await generateFile(textContent, fileName, selectedFormat);
+      generateTxtFile(textContent, fileName);
       
       toast({
         title: "File downloaded successfully!",
-        description: `${fileName}.${selectedFormat} has been saved to your downloads.`,
+        description: `${fileName}.txt has been saved to your downloads.`,
       });
     } catch (error) {
       console.error('Download error:', error);
       toast({
         title: "Download failed",
-        description: `Failed to generate ${selectedFormat.toUpperCase()} file. Please try again.`,
+        description: "Failed to generate TXT file. Please try again.",
         variant: "destructive"
       });
     }
@@ -51,8 +49,16 @@ const Index = () => {
   const canDownload = textContent.trim().length > 0 && fileName.trim().length > 0;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <HeroSection />
+    <div className="container mx-auto px-4 py-24 max-w-4xl">
+      <div className="text-center space-y-4 mb-10">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-primary rounded-2xl mb-4">
+          <FileText className="w-8 h-8 text-white" />
+        </div>
+        <h1 className="text-4xl font-bold text-foreground">Text to TXT</h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Save your text as plain text files for maximum compatibility.
+        </p>
+      </div>
       
       <div className="space-y-8">
         <TextEditor 
@@ -60,25 +66,16 @@ const Index = () => {
           onChange={setTextContent}
         />
         
-        <FileFormatSelector 
-          selectedFormat={selectedFormat}
-          onFormatChange={setSelectedFormat}
-        />
-        
         <FileNameInput
           fileName={fileName}
           onFileNameChange={setFileName}
-          selectedFormat={selectedFormat}
+          selectedFormat="txt"
           onDownload={handleDownload}
           canDownload={canDownload}
         />
-      </div>
-
-      <div className="mt-12 text-center text-sm text-muted-foreground">
-        <p>✨ Files are generated instantly in your browser - no server uploads required!</p>
       </div>
     </div>
   );
 };
 
-export default Index;
+export default TextToTxt;
