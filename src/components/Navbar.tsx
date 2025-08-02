@@ -21,10 +21,11 @@ export const Navbar = () => {
     { name: "Text to DOCX", path: "/tools/text-to-docx", icon: FileText },
     { name: "Text to PDF", path: "/tools/text-to-pdf", icon: FileText },
     { name: "Text to TXT", path: "/tools/text-to-txt", icon: FileText },
-    { name: "Image to PDF", path: "/tools/image-to-pdf", icon: Image },
     { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileText },
     { name: "PDF Merger", path: "/tools/pdf-merger", icon: Merge },
+    { name: "DOCX Merger", path: "/tools/docx-merger", icon: Merge },
     { name: "Image Resizer", path: "/tools/image-resizer", icon: Settings },
+    { name: "Image to PDF", path: "/tools/image-to-pdf", icon: Image },
   ];
 
   return (
@@ -72,12 +73,6 @@ export const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
-            <Button 
-              variant="gradient" 
-              className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
-            >
-              Start a Project
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -113,14 +108,6 @@ export const Navbar = () => {
                     <span className="text-foreground">{tool.name}</span>
                   </Link>
                 ))}
-                <div className="px-4 pt-4">
-                  <Button 
-                    variant="gradient" 
-                    className="w-full bg-gradient-primary"
-                  >
-                    Start a Project
-                  </Button>
-                </div>
               </div>
             </motion.div>
           )}

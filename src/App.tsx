@@ -12,6 +12,7 @@ import TextToTxt from "./pages/tools/TextToTxt";
 import ImageToPdf from "./pages/tools/ImageToPdf";
 import DocxToPdf from "./pages/tools/DocxToPdf";
 import PdfMerger from "./pages/tools/PdfMerger";
+import DocxMerger from "./pages/tools/DocxMerger";
 import ImageResizer from "./pages/tools/ImageResizer";
 import NotFound from "./pages/NotFound";
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/tools/image-to-pdf" element={<ImageToPdf />} />
             <Route path="/tools/docx-to-pdf" element={<DocxToPdf />} />
             <Route path="/tools/pdf-merger" element={<PdfMerger />} />
+            <Route path="/tools/docx-merger" element={<DocxMerger />} />
             <Route path="/tools/image-resizer" element={<ImageResizer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
