@@ -41,14 +41,14 @@ export const FileNameInput = ({
   return (
     <Card className="p-6 bg-gradient-card border-0 shadow-soft">
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">Name Your File</h2>
+        <h2 className="text-xl font-bold text-foreground text-[#8B4513]">Name Your File</h2>
         
         <div className="space-y-4">
           <div className="relative">
             <Input
               value={fileName}
               onChange={handleFileNameChange}
-              placeholder="Enter file name (e.g., meeting-notes, report-draft)"
+              placeholder="Enter file name (like : DSA Module 1 Notes.)"
               className={`pr-20 transition-smooth ${
                 !isValid 
                   ? 'border-destructive focus:border-destructive focus:ring-destructive/20' 

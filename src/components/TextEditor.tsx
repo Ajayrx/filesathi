@@ -31,7 +31,7 @@ export const TextEditor = ({ value, onChange }: TextEditorProps) => {
       
       <div className="space-y-4 relative z-10">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-foreground">✍️ Write Your Educational Content</h2>
+          <h2 className="text-xl font-bold text-foreground text-[#8B4513]">✍️ Paste Here</h2>
           <div className="flex gap-4 text-sm text-muted-foreground bg-saffron-light/20 px-3 py-1 rounded-full">
             <span className="font-medium">{wordCount} words</span>
             <span className="font-medium">{charCount} characters</span>
@@ -41,18 +41,15 @@ export const TextEditor = ({ value, onChange }: TextEditorProps) => {
         <Textarea
           value={value}
           onChange={handleTextChange}
-          placeholder="Paste or type your educational content here... 
-
-📚 Perfect for:
-• Lecture notes and class materials
-• Research papers and academic content  
-• Study guides and educational resources
-• Meeting notes from educational sessions
-• Assignment instructions and syllabi
-
-This editor supports symbols (★ • → ← ↑ ↓ © ® ™ °) and special characters that will be properly converted in your downloaded files."
-          className="min-h-[400px] resize-none border-primary/20 focus:border-primary focus:ring-primary/20 bg-background/60 text-foreground placeholder:text-muted-foreground/80 transition-smooth shadow-inner"
+          placeholder={`📚 Perfect for:
+    • ChatGPT Notes into PDF
+    • Make Exam PDFs, DOCX
+    • Research Papers
+    • Assignments & More`}
+          rows={8}
+          className="min-h-[200px] resize-none border-primary/20 focus:border-primary focus:ring-primary/20 bg-background/60 text-foreground placeholder:text-muted-foreground/80 transition-smooth shadow-inner"
         />
+
       </div>
     </Card>
   );

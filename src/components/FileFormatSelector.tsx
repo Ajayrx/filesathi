@@ -15,7 +15,7 @@ const formats: FileFormat[] = [
   {
     id: "docx",
     name: "Microsoft Word",
-    extension: ".docx",
+    extension: "myfile.docx",
     description: "Rich text with formatting support",
     icon: <FileText className="w-6 h-6" />,
     color: "text-blue-600"
@@ -23,7 +23,7 @@ const formats: FileFormat[] = [
   {
     id: "pdf",
     name: "PDF Document", 
-    extension: ".pdf",
+    extension: "myfile.pdf",
     description: "Printable, professional format",
     icon: <FileType className="w-6 h-6" />,
     color: "text-red-600"
@@ -31,7 +31,7 @@ const formats: FileFormat[] = [
   {
     id: "txt",
     name: "Plain Text",
-    extension: ".txt",
+    extension: "myfile.txt",
     description: "Simple, universal text file",
     icon: <FileText className="w-6 h-6" />,
     color: "text-gray-600"
@@ -47,7 +47,7 @@ export const FileFormatSelector = ({ selectedFormat, onFormatChange }: FileForma
   return (
     <Card className="p-6 bg-gradient-card border-0 shadow-soft">
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">Choose File Format</h2>
+        <h2 className="text-xl font-bold text-foreground text-[#8B4513]">Choose File Format</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {formats.map((format) => (
