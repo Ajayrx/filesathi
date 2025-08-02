@@ -22,25 +22,36 @@ export const TextEditor = ({ value, onChange }: TextEditorProps) => {
   };
 
   return (
-    <Card className="p-6 bg-gradient-card border-0 shadow-soft">
-      <div className="space-y-4">
+    <Card className="p-6 bg-gradient-card border border-primary/10 shadow-warm relative overflow-hidden">
+      {/* Subtle pattern overlay */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-4 right-4 w-8 h-8 border-2 border-primary rounded rotate-45"></div>
+        <div className="absolute bottom-4 left-4 w-6 h-6 bg-saffron-light rounded-full"></div>
+      </div>
+      
+      <div className="space-y-4 relative z-10">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-foreground">Write Your Content</h2>
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <span>{wordCount} words</span>
-            <span>{charCount} characters</span>
+          <h2 className="text-xl font-semibold text-foreground">✍️ Write Your Educational Content</h2>
+          <div className="flex gap-4 text-sm text-muted-foreground bg-saffron-light/20 px-3 py-1 rounded-full">
+            <span className="font-medium">{wordCount} words</span>
+            <span className="font-medium">{charCount} characters</span>
           </div>
         </div>
         
         <Textarea
           value={value}
           onChange={handleTextChange}
-          placeholder="Paste or type your content here... 
-          
-✍️ Meeting notes, lecture content, chat logs, or any text you want to convert into a downloadable file format.
+          placeholder="Paste or type your educational content here... 
 
-This text editor supports multiple lines and will preserve your formatting when exported."
-          className="min-h-[400px] resize-none border-border/50 focus:border-primary/50 focus:ring-primary/20 bg-background/50 text-foreground placeholder:text-muted-foreground/70 transition-smooth"
+📚 Perfect for:
+• Lecture notes and class materials
+• Research papers and academic content  
+• Study guides and educational resources
+• Meeting notes from educational sessions
+• Assignment instructions and syllabi
+
+This editor supports symbols (★ • → ← ↑ ↓ © ® ™ °) and special characters that will be properly converted in your downloaded files."
+          className="min-h-[400px] resize-none border-primary/20 focus:border-primary focus:ring-primary/20 bg-background/60 text-foreground placeholder:text-muted-foreground/80 transition-smooth shadow-inner"
         />
       </div>
     </Card>

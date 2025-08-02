@@ -8,46 +8,50 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 240 10% 15%;
+    --background: 46 100% 97%;
+    --foreground: 25 95% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 15%;
+    --card-foreground: 25 95% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 15%;
+    --popover-foreground: 25 95% 12%;
 
-    --primary: 263 70% 50%;
+    --primary: 32 95% 44%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 268 100% 80%;
+    --primary-glow: 45 100% 70%;
+    --saffron-light: 38 100% 85%;
+    --saffron-deep: 28 85% 35%;
 
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 10% 20%;
+    --secondary: 45 25% 94%;
+    --secondary-foreground: 25 95% 15%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 42 15% 92%;
+    --muted-foreground: 25 35% 45%;
 
-    --accent: 268 100% 95%;
-    --accent-foreground: 263 70% 50%;
+    --accent: 43 75% 88%;
+    --accent-foreground: 32 95% 25%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 263 70% 50%;
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 32 95% 44%;
 
-    /* Gradients */
+    /* Education-inspired gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-background: linear-gradient(180deg, hsl(var(--background)), hsl(240 10% 96%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(240 10% 98%));
+    --gradient-background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--saffron-light)) 50%, hsl(var(--background)));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(45 30% 98%));
+    --gradient-education: linear-gradient(120deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 50%, hsl(var(--saffron-light)) 100%);
 
-    /* Shadows */
-    --shadow-soft: 0 4px 6px -1px hsl(var(--primary) / 0.1), 0 2px 4px -1px hsl(var(--primary) / 0.06);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.3);
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
+    /* Educational shadows */
+    --shadow-soft: 0 4px 6px -1px hsl(var(--primary) / 0.1), 0 2px 4px -1px hsl(var(--saffron-deep) / 0.06);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.25);
+    --shadow-warm: 0 8px 25px -8px hsl(var(--saffron-deep) / 0.3);
 
-    /* Transitions */
+    /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;

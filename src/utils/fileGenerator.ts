@@ -10,12 +10,41 @@ export const generateTxtFile = (content: string, fileName: string) => {
 export const generatePdfFile = (content: string, fileName: string) => {
   const pdf = new jsPDF();
   
-  // Set font and size
+  // Set font to support more characters and symbols
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(12);
   
+  // Convert content to handle UTF-8 properly
+  const processedContent = content
+    .replace(/[""]/g, '"')  // Smart quotes to regular quotes
+    .replace(/['']/g, "'")  // Smart apostrophes to regular apostrophes
+    .replace(/[–—]/g, '-')  // Em/en dashes to regular dash
+    .replace(/…/g, '...')   // Ellipsis to three dots
+    .replace(/[^\x00-\x7F]/g, (char) => {
+      // Handle common symbols that might not render properly
+      const symbolMap: { [key: string]: string } = {
+        '•': '* ',
+        '★': '*',
+        '♦': '^',
+        '→': '->',
+        '←': '<-',
+        '↑': '^',
+        '↓': 'v',
+        '©': '(c)',
+        '®': '(R)',
+        '™': '(TM)',
+        '°': ' deg',
+        '±': '+/-',
+        '≤': '<=',
+        '≥': '>=',
+        '≠': '!=',
+        '∞': 'infinity'
+      };
+      return symbolMap[char] || char;
+    });
+  
   // Split content into lines and add to PDF
-  const lines = content.split('\n');
+  const lines = processedContent.split('\n');
   const pageHeight = pdf.internal.pageSize.height;
   const lineHeight = 7;
   const margin = 20;
@@ -31,7 +60,14 @@ export const generatePdfFile = (content: string, fileName: string) => {
         yPosition = margin;
       }
       
-      pdf.text(wrappedLine, margin, yPosition);
+      // Use try-catch to handle any remaining problematic characters
+      try {
+        pdf.text(wrappedLine, margin, yPosition);
+      } catch (error) {
+        // Fallback: replace any remaining problematic characters
+        const cleanLine = wrappedLine.replace(/[^\x00-\x7F]/g, '?');
+        pdf.text(cleanLine, margin, yPosition);
+      }
       yPosition += lineHeight;
     });
   });
