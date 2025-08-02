@@ -4,6 +4,7 @@ import { TextEditor } from "@/components/TextEditor";
 import { FileFormatSelector } from "@/components/FileFormatSelector";
 import { FileNameInput } from "@/components/FileNameInput";
 import { useToast } from "@/hooks/use-toast";
+import { generateFile } from "@/utils/fileGenerator";
 
 const Index = () => {
   const [textContent, setTextContent] = useState("");
@@ -11,7 +12,7 @@ const Index = () => {
   const [fileName, setFileName] = useState("");
   const { toast } = useToast();
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!textContent.trim()) {
       toast({
         title: "No content to download",
@@ -30,22 +31,21 @@ const Index = () => {
       return;
     }
 
-    // Simulate file generation and download
-    // In a real app, this would send the data to a backend API
-    const blob = new Blob([textContent], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${fileName}.${selectedFormat}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    toast({
-      title: "File downloaded successfully!",
-      description: `${fileName}.${selectedFormat} has been saved to your downloads.`,
-    });
+    try {
+      await generateFile(textContent, fileName, selectedFormat);
+      
+      toast({
+        title: "File downloaded successfully!",
+        description: `${fileName}.${selectedFormat} has been saved to your downloads.`,
+      });
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Download failed",
+        description: `Failed to generate ${selectedFormat.toUpperCase()} file. Please try again.`,
+        variant: "destructive"
+      });
+    }
   };
 
   const canDownload = textContent.trim().length > 0 && fileName.trim().length > 0;
