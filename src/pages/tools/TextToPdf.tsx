@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { TextEditor } from "@/components/TextEditor";
 import { FileNameInput } from "@/components/FileNameInput";
 import { useToast } from "@/hooks/use-toast";
 import { generatePdfFile } from "@/utils/fileGenerator";
-import { FileText } from "lucide-react";
+import { FileText, Download } from "lucide-react";
 
 const TextToPdf = () => {
   const [textContent, setTextContent] = useState("");
@@ -67,12 +69,21 @@ const TextToPdf = () => {
         />
         
         <FileNameInput
-          fileName={fileName}
-          onFileNameChange={setFileName}
-          selectedFormat="pdf"
-          onDownload={handleDownload}
-          canDownload={canDownload}
+          value={fileName}
+          onChange={setFileName}
+          extension=".pdf"
+          placeholder="Enter document name"
         />
+
+        <Button 
+          onClick={handleDownload}
+          disabled={!canDownload}
+          className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-primary-foreground font-medium py-3"
+          size="lg"
+        >
+          <Download className="w-5 h-5 mr-2" />
+          Generate PDF
+        </Button>
       </div>
     </div>
   );

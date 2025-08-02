@@ -66,11 +66,10 @@ const Index = () => {
         />
         
         <FileNameInput
-          fileName={fileName}
-          onFileNameChange={setFileName}
-          selectedFormat={selectedFormat}
-          onDownload={handleDownload}
-          canDownload={canDownload}
+          value={fileName}
+          onChange={setFileName}
+          extension=".docx"
+          placeholder="Enter document name"
         />
       </div>
 
