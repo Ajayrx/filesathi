@@ -26,14 +26,13 @@ export const Navbar = () => {
 
   const navItems = [
     { name: "Home", path: "/", icon: HomeIcon },
-    { name: "Text to DOCX", path: "/tools/text-to-docx", icon: BookText },
-    { name: "Text to TXT", path: "/tools/text-to-txt", icon: BookText },
+    { name: "Img to PDF", path: "/tools/image-to-pdf", icon: Image },
     { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileDown },
     { name: "PDF Merger", path: "/tools/pdf-merger", icon: Merge },
     { name: "DOCX Merger", path: "/tools/docx-merger", icon: Merge },
     { name: "Image Resizer", path: "/tools/image-resizer", icon: Settings },
-    { name: "Image to PDF (Multi-image)", path: "/tools/image-to-pdf-multi", icon: Image },
-    { name: "Img to PDF", path: "/tools/image-to-pdf", icon: Image },
+    
+    
   ];
 
   return (

@@ -54,7 +54,7 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
         
         <div className="space-y-4 relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <h2 className="text-xl font-bold text-foreground text-[#8B4513]">✍️ Content Editor</h2>
+            <h2 className="text-xl font-bold text-foreground text-[#8B4513]">✍️ Content Editor / Paste Here</h2>
             <div className="flex gap-4 text-sm text-muted-foreground bg-saffron-light/20 px-3 py-1 rounded-full">
               <span className="font-medium">{wordCount} words</span>
               <span className="font-medium">{charCount} characters</span>
@@ -112,11 +112,9 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
     • ChatGPT Notes into PDF
     • Make Exam PDFs, DOCX
     • Research Papers
-    • Assignments & More
-    
-Supports special characters: ₹, °, µ, ©, ®, ™, →, ←, ↑, ↓`}
+    • Assignments & More`}
             rows={8}
-            className="min-h-[300px] resize-none border-primary/20 focus:border-primary focus:ring-primary/20 bg-background/40 text-foreground placeholder:text-muted-foreground/80 transition-smooth shadow-inner"
+            className="min-h-[200px] resize-none border-primary/20 focus:border-primary focus:ring-primary/20 bg-background/40 text-foreground placeholder:text-muted-foreground/80 transition-smooth shadow-inner"
             style={{
               fontSize: `${fontSize}px`,
               fontWeight: isBold ? 'bold' : 'normal',
