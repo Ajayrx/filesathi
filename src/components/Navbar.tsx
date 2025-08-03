@@ -1,35 +1,43 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
-import { FileText, Image, Merge, Settings, Menu, X } from "lucide-react";
+import {
+  Home as HomeIcon,
+  FileText,
+  Image,
+  Merge,
+  Settings,
+  Menu,
+  X,
+  BookText,
+  FileDown
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  const tools = [
-    { name: "Text to DOCX", path: "/tools/text-to-docx", icon: FileText },
-    { name: "Text to PDF", path: "/tools/text-to-pdf", icon: FileText },
-    { name: "Text to TXT", path: "/tools/text-to-txt", icon: FileText },
-    { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileText },
+  const navItems = [
+    { name: "Home", path: "/", icon: HomeIcon },
+    { name: "Text to DOCX", path: "/tools/text-to-docx", icon: BookText },
+    { name: "Text to PDF", path: "/tools/text-to-pdf", icon: BookText },
+    { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileDown },
     { name: "PDF Merger", path: "/tools/pdf-merger", icon: Merge },
     { name: "DOCX Merger", path: "/tools/docx-merger", icon: Merge },
     { name: "Image Resizer", path: "/tools/image-resizer", icon: Settings },
-    { name: "Image to PDF", path: "/tools/image-to-pdf", icon: Image },
+    { name: "Image to PDF (Multi-image)", path: "/tools/image-to-pdf-multi", icon: Image },
+    { name: "Img to PDF", path: "/tools/image-to-pdf", icon: Image },
   ];
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className="fixed top-0 left-0 right-0 z-50 bg-glass-light backdrop-blur-xl border-b border-white/10 shadow-glow"
@@ -37,42 +45,29 @@ export const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2" onClick={() => setIsMenuOpen(false)}>
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <FileText className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-foreground">DocuGen</span>
+            <span className="text-xl font-bold text-foreground">Study.io</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          {/* Desktop Navigation - Justified to fill space */}
+          <div className="hidden md:flex flex-1 justify-end items-center">
             <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-foreground hover:bg-white/10">
-                    Tools
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-6 w-[500px] grid-cols-2 bg-glass-light backdrop-blur-xl border border-white/20 rounded-xl shadow-warm">
-                      {tools.map((tool) => (
-                        <NavigationMenuLink key={tool.path} asChild>
-                          <Link
-                            to={tool.path}
-                            className="group flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition-all duration-200"
-                          >
-                            <tool.icon className="w-5 h-5 text-saffron-deep group-hover:text-primary transition-colors" />
-                            <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                              {tool.name}
-                            </span>
-                          </Link>
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+              <NavigationMenuList className="flex space-x-1">
+                {navItems.map((item) => (
+                  // CORRECTED PART: Use NavigationMenuLink with asChild pointing to Link
+                  <li key={item.path}> {/* Wrap in an li as NavigationMenuList expects li children */}
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link to={item.path}>
+                        {item.name}
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                ))}
               </NavigationMenuList>
             </NavigationMenu>
-
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,16 +91,15 @@ export const Navbar = () => {
               className="md:hidden overflow-hidden bg-glass-light backdrop-blur-xl border-t border-white/10"
             >
               <div className="py-4 space-y-2">
-                <div className="text-sm font-semibold text-saffron-deep px-4 py-2">Tools</div>
-                {tools.map((tool) => (
+                {navItems.map((item) => (
                   <Link
-                    key={tool.path}
-                    to={tool.path}
+                    key={item.path}
+                    to={item.path}
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 hover:bg-white/10 transition-colors"
                   >
-                    <tool.icon className="w-5 h-5 text-saffron-deep" />
-                    <span className="text-foreground">{tool.name}</span>
+                    <item.icon className="w-5 h-5 text-saffron-deep" />
+                    <span className="text-foreground">{item.name}</span>
                   </Link>
                 ))}
               </div>

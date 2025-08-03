@@ -2,7 +2,7 @@ import { FileText, Download, Zap } from "lucide-react";
 
 export const HeroSection = () => {
   return (
-    <div className="text-center space-y-2 mb-10 relative">
+    <div className="text-center space-y-10 mb-12 relative">
       {/* Geometric Background Elements */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="absolute top-10 left-1/4 w-32 h-32 bg-saffron-light/20 rounded-full blur-xl"></div>
