@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { convertDocxToPdf } from "@/utils/conversionUtils";
 import { FileText, Upload } from "lucide-react";
 
 const DocxToPdf = () => {
@@ -26,12 +27,29 @@ const DocxToPdf = () => {
     }
   };
 
-  const handleDownload = () => {
-    // Placeholder for DOCX to PDF conversion
-    toast({
-      title: "Feature coming soon!",
-      description: "DOCX to PDF conversion will be available soon.",
-    });
+  const handleDownload = async () => {
+    if (!selectedFile || !fileName.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please select a file and enter a filename.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await convertDocxToPdf(selectedFile, fileName);
+      toast({
+        title: "Success!",
+        description: `${fileName}.pdf has been generated and downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Conversion failed",
+        description: "Failed to convert DOCX to PDF. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const canDownload = selectedFile && fileName.trim().length > 0;

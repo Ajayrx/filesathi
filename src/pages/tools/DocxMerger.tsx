@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { mergeDocxFiles } from "@/utils/conversionUtils";
 import { FileText, Upload, X, GripVertical } from "lucide-react";
 
 const DocxMerger = () => {
@@ -38,12 +39,29 @@ const DocxMerger = () => {
     setSelectedFiles(updatedFiles);
   };
 
-  const handleDownload = () => {
-    // Placeholder for DOCX merging functionality
-    toast({
-      title: "Feature coming soon!",
-      description: "DOCX merging will be available soon.",
-    });
+  const handleDownload = async () => {
+    if (selectedFiles.length < 2 || !fileName.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please select at least 2 DOCX files and enter a filename.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await mergeDocxFiles(selectedFiles, fileName);
+      toast({
+        title: "Success!",
+        description: `${fileName}_merged.txt has been generated and downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Merge failed",
+        description: "Failed to merge DOCX files. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const canDownload = selectedFiles.length > 1 && fileName.trim().length > 0;

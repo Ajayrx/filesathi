@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { mergePdfFiles } from "@/utils/conversionUtils";
 import { Merge, Upload, X, ArrowUp, ArrowDown } from "lucide-react";
 
 const PdfMerger = () => {
@@ -39,12 +40,29 @@ const PdfMerger = () => {
     }
   };
 
-  const handleMerge = () => {
-    // Placeholder for PDF merging
-    toast({
-      title: "Feature coming soon!",
-      description: "PDF merging will be available soon.",
-    });
+  const handleMerge = async () => {
+    if (selectedFiles.length < 2 || !fileName.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please select at least 2 PDF files and enter a filename.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await mergePdfFiles(selectedFiles, fileName);
+      toast({
+        title: "Success!",
+        description: `${fileName}.pdf has been merged and downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Merge failed",
+        description: "Failed to merge PDF files. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const canMerge = selectedFiles.length >= 2 && fileName.trim().length > 0;

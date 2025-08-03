@@ -27,7 +27,7 @@ export const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/", icon: HomeIcon },
     { name: "Text to DOCX", path: "/tools/text-to-docx", icon: BookText },
-    { name: "Text to PDF", path: "/tools/text-to-pdf", icon: BookText },
+    { name: "Text to TXT", path: "/tools/text-to-txt", icon: BookText },
     { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileDown },
     { name: "PDF Merger", path: "/tools/pdf-merger", icon: Merge },
     { name: "DOCX Merger", path: "/tools/docx-merger", icon: Merge },

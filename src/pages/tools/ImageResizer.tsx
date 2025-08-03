@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { resizeImage } from "@/utils/conversionUtils";
 import { Settings, Upload, Download } from "lucide-react";
 
 const ImageResizer = () => {
@@ -30,12 +31,33 @@ const ImageResizer = () => {
     }
   };
 
-  const handleResize = () => {
-    // Placeholder for image resizing
-    toast({
-      title: "Feature coming soon!",
-      description: "Image resizing will be available soon.",
-    });
+  const handleResize = async () => {
+    if (!selectedImage || !fileName.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please select an image and enter a filename.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const widthNum = width ? parseInt(width) : undefined;
+    const heightNum = height ? parseInt(height) : undefined;
+    const qualityNum = parseInt(quality);
+
+    try {
+      await resizeImage(selectedImage, fileName, widthNum, heightNum, qualityNum);
+      toast({
+        title: "Success!",
+        description: `${fileName}.jpg has been resized and downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Resize failed",
+        description: "Failed to resize image. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const canResize = selectedImage && fileName.trim().length > 0;

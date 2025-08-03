@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { convertImagesToPdf } from "@/utils/conversionUtils";
 import { Image, Upload, X, GripVertical, Move } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -54,11 +55,29 @@ const ImageToPdf = () => {
     setDraggedIndex(null);
   };
 
-  const handleDownload = () => {
-    toast({
-      title: "Feature coming soon!",
-      description: "Image to PDF conversion will be available soon.",
-    });
+  const handleConvert = async () => {
+    if (selectedImages.length === 0 || !fileName.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please select at least one image and enter a filename.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await convertImagesToPdf(selectedImages, fileName);
+      toast({
+        title: "Success!",
+        description: `${fileName}.pdf has been generated and downloaded.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Conversion failed",
+        description: "Failed to convert images to PDF. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const canDownload = selectedImages.length > 0 && fileName.trim().length > 0;
@@ -203,7 +222,7 @@ const ImageToPdf = () => {
               </div>
 
               <Button 
-                onClick={handleDownload}
+                onClick={handleConvert}
                 disabled={!canDownload}
                 className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 text-primary-foreground font-medium py-3"
                 size="lg"
