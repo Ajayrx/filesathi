@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { resizeImage } from "@/utils/conversionUtils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Settings, Upload, Download } from "lucide-react";
 
 const ImageResizer = () => {
@@ -12,6 +13,7 @@ const ImageResizer = () => {
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [quality, setQuality] = useState("80");
+  const [targetSize, setTargetSize] = useState("");
   const [fileName, setFileName] = useState("");
   const { toast } = useToast();
 
@@ -44,9 +46,10 @@ const ImageResizer = () => {
     const widthNum = width ? parseInt(width) : undefined;
     const heightNum = height ? parseInt(height) : undefined;
     const qualityNum = parseInt(quality);
+    const targetSizeKB = targetSize ? parseInt(targetSize) : undefined;
 
     try {
-      await resizeImage(selectedImage, fileName, widthNum, heightNum, qualityNum);
+      await resizeImage(selectedImage, fileName, widthNum, heightNum, qualityNum, targetSizeKB);
       toast({
         title: "Success!",
         description: `${fileName}.jpg has been resized and downloaded.`,
@@ -139,7 +142,7 @@ const ImageResizer = () => {
               />
             </div>
             
-            <div className="space-y-2 md:col-span-2">
+            <div className="space-y-2">
               <Label htmlFor="quality">Quality (%)</Label>
               <Input
                 id="quality"
@@ -150,6 +153,23 @@ const ImageResizer = () => {
                 onChange={(e) => setQuality(e.target.value)}
                 placeholder="Image quality (1-100)"
               />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="targetSize">Target File Size</Label>
+              <Select value={targetSize} onValueChange={setTargetSize}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select target size (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">No size limit</SelectItem>
+                  <SelectItem value="50">50 KB</SelectItem>
+                  <SelectItem value="100">100 KB</SelectItem>
+                  <SelectItem value="200">200 KB</SelectItem>
+                  <SelectItem value="500">500 KB</SelectItem>
+                  <SelectItem value="1000">1 MB</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           

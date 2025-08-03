@@ -272,7 +272,8 @@ export const resizeImage = async (
   fileName: string, 
   width?: number, 
   height?: number, 
-  quality: number = 80
+  quality: number = 80,
+  targetSizeKB?: number
 ): Promise<void> => {
   try {
     const canvas = document.createElement('canvas');
@@ -307,12 +308,58 @@ export const resizeImage = async (
     // Draw resized image
     ctx.drawImage(img, 0, 0, newWidth, newHeight);
     
-    // Convert to blob and download
-    canvas.toBlob((blob) => {
+    if (targetSizeKB) {
+      // Iteratively compress to reach target file size
+      let currentQuality = quality;
+      let blob: Blob | null = null;
+      
+      while (currentQuality > 5) {
+        blob = await new Promise<Blob | null>((resolve) => {
+          canvas.toBlob(resolve, 'image/jpeg', currentQuality / 100);
+        });
+        
+        if (blob && blob.size <= targetSizeKB * 1024) {
+          break;
+        }
+        
+        currentQuality -= 5;
+      }
+      
+      // If still too large, try reducing dimensions
+      if (blob && blob.size > targetSizeKB * 1024) {
+        let scaleFactor = 0.9;
+        
+        while (scaleFactor > 0.3) {
+          const scaledWidth = Math.floor(newWidth * scaleFactor);
+          const scaledHeight = Math.floor(newHeight * scaleFactor);
+          
+          canvas.width = scaledWidth;
+          canvas.height = scaledHeight;
+          ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+          
+          blob = await new Promise<Blob | null>((resolve) => {
+            canvas.toBlob(resolve, 'image/jpeg', 80 / 100);
+          });
+          
+          if (blob && blob.size <= targetSizeKB * 1024) {
+            break;
+          }
+          
+          scaleFactor -= 0.1;
+        }
+      }
+      
       if (blob) {
         saveAs(blob, `${fileName}.jpg`);
       }
-    }, 'image/jpeg', quality / 100);
+    } else {
+      // Convert to blob and download without size constraint
+      canvas.toBlob((blob) => {
+        if (blob) {
+          saveAs(blob, `${fileName}.jpg`);
+        }
+      }, 'image/jpeg', quality / 100);
+    }
     
     URL.revokeObjectURL(img.src);
   } catch (error) {
