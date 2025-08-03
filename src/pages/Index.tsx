@@ -3,8 +3,10 @@ import { HeroSection } from "@/components/HeroSection";
 import { TextEditor } from "@/components/TextEditor";
 import { FileFormatSelector } from "@/components/FileFormatSelector";
 import { FileNameInput } from "@/components/FileNameInput";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { generateFile } from "@/utils/fileGenerator";
+import { FileDown } from "lucide-react";
 
 const Index = () => {
   const [textContent, setTextContent] = useState("");
@@ -51,7 +53,7 @@ const Index = () => {
   const canDownload = textContent.trim().length > 0 && fileName.trim().length > 0;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
       <HeroSection />
       
       <div className="space-y-8">
@@ -68,9 +70,21 @@ const Index = () => {
         <FileNameInput
           value={fileName}
           onChange={setFileName}
-          extension=".docx"
+          extension={`.${selectedFormat}`}
           placeholder="Enter document name"
         />
+        
+        <div className="flex justify-center">
+          <Button 
+            onClick={handleDownload}
+            disabled={!canDownload}
+            className="bg-gradient-primary hover:shadow-glow transition-all duration-300 text-primary-foreground font-medium py-3 px-8"
+            size="lg"
+          >
+            <FileDown className="w-5 h-5 mr-2" />
+            Download {selectedFormat.toUpperCase()} File
+          </Button>
+        </div>
       </div>
 
       <div className="mt-12 text-center text-sm text-muted-foreground">

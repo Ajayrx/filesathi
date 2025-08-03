@@ -45,7 +45,7 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
       transition={{ delay: 0.1 }}
       className="space-y-4"
     >
-      <Card className="p-6 bg-gradient-card border border-primary/10 shadow-warm relative overflow-hidden">
+      <Card className="p-4 sm:p-6 bg-gradient-card border border-primary/10 shadow-warm relative overflow-hidden">
         {/* Subtle pattern overlay */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-4 right-4 w-8 h-8 border-2 border-primary rounded rotate-45"></div>
@@ -53,15 +53,15 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
         </div>
         
         <div className="space-y-4 relative z-10">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <h2 className="text-xl font-bold text-foreground text-[#8B4513]">✍️ Content Editor / Paste Here</h2>
-            <div className="flex gap-4 text-sm text-muted-foreground bg-saffron-light/20 px-3 py-1 rounded-full">
+          <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-4">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground text-[#8B4513]">✍️ Content Editor / Paste Here</h2>
+            <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground bg-saffron-light/20 px-2 sm:px-3 py-1 rounded-full">
               <span className="font-medium">{wordCount} words</span>
               <span className="font-medium">{charCount} characters</span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 p-3 bg-glass-light backdrop-blur-sm border border-white/20 rounded-lg">
+          <div className="flex items-center flex-wrap gap-2 sm:space-x-3 p-2 sm:p-3 bg-glass-light backdrop-blur-sm border border-white/20 rounded-lg">
             <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
