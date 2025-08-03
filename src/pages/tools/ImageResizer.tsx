@@ -46,7 +46,7 @@ const ImageResizer = () => {
     const widthNum = width ? parseInt(width) : undefined;
     const heightNum = height ? parseInt(height) : undefined;
     const qualityNum = parseInt(quality);
-    const targetSizeKB = targetSize ? parseInt(targetSize) : undefined;
+    const targetSizeKB = targetSize && targetSize !== "none" ? parseInt(targetSize) : undefined;
 
     try {
       await resizeImage(selectedImage, fileName, widthNum, heightNum, qualityNum, targetSizeKB);
@@ -162,7 +162,7 @@ const ImageResizer = () => {
                   <SelectValue placeholder="Select target size (optional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No size limit</SelectItem>
+                  <SelectItem value="none">No size limit</SelectItem>
                   <SelectItem value="50">50 KB</SelectItem>
                   <SelectItem value="100">100 KB</SelectItem>
                   <SelectItem value="200">200 KB</SelectItem>
