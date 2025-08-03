@@ -1,24 +1,38 @@
 import { PDFDocument } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
+import mammoth from 'mammoth';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
 
-// DOCX to PDF conversion with better text extraction
+// DOCX to PDF conversion with actual text extraction
 export const convertDocxToPdf = async (file: File, fileName: string): Promise<void> => {
   try {
     const arrayBuffer = await file.arrayBuffer();
+    
+    // Extract text from DOCX using mammoth
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    const text = result.value;
+    
     const pdf = new jsPDF();
     
-    // Basic text extraction - for full DOCX parsing, would need server-side processing
-    pdf.setFontSize(16);
-    pdf.text('DOCX to PDF Conversion', 20, 30);
-    pdf.setFontSize(12);
-    pdf.text(`Original file: ${file.name}`, 20, 50);
-    pdf.text(`File size: ${(file.size / 1024 / 1024).toFixed(2)} MB`, 20, 70);
-    pdf.text(`Converted on: ${new Date().toLocaleDateString()}`, 20, 90);
+    // Split text into lines that fit the page width
+    const pageWidth = pdf.internal.pageSize.getWidth() - 40; // 20px margin on each side
+    const lines = pdf.splitTextToSize(text, pageWidth);
     
-    // Add some content indication
-    pdf.text('Content has been extracted and converted to PDF format.', 20, 120);
-    pdf.text('For advanced formatting preservation, use our cloud converter.', 20, 140);
+    let currentY = 30;
+    const lineHeight = 10;
+    const pageHeight = pdf.internal.pageSize.getHeight() - 40; // 20px margin top/bottom
+    
+    // Add text to PDF with proper pagination
+    for (let i = 0; i < lines.length; i++) {
+      if (currentY > pageHeight) {
+        pdf.addPage();
+        currentY = 30;
+      }
+      
+      pdf.text(lines[i], 20, currentY);
+      currentY += lineHeight;
+    }
     
     pdf.save(`${fileName}.pdf`);
   } catch (error) {
@@ -48,46 +62,68 @@ export const mergePdfFiles = async (files: File[], fileName: string): Promise<vo
   }
 };
 
-// DOCX Merger function with better implementation
+// DOCX Merger function - creates actual merged DOCX file
 export const mergeDocxFiles = async (files: File[], fileName: string): Promise<void> => {
   try {
-    const pdf = new jsPDF();
-    let currentY = 20;
+    const allParagraphs: Paragraph[] = [];
     
-    // Add title page
-    pdf.setFontSize(18);
-    pdf.text('Merged DOCX Documents', 20, currentY);
-    currentY += 20;
-    
-    pdf.setFontSize(12);
-    pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, currentY);
-    currentY += 15;
-    pdf.text(`Total documents: ${files.length}`, 20, currentY);
-    currentY += 30;
-    
-    // Process each file
+    // Extract text from each DOCX file
     for (let i = 0; i < files.length; i++) {
-      if (currentY > 250) {
-        pdf.addPage();
-        currentY = 20;
+      const file = files[i];
+      const arrayBuffer = await file.arrayBuffer();
+      
+      // Add document separator
+      if (i > 0) {
+        allParagraphs.push(new Paragraph({
+          children: [new TextRun({ text: '\n\n--- Document Separator ---\n\n', bold: true })]
+        }));
       }
       
-      pdf.setFontSize(14);
-      pdf.text(`Document ${i + 1}: ${files[i].name}`, 20, currentY);
-      currentY += 15;
+      // Add document title
+      allParagraphs.push(new Paragraph({
+        children: [new TextRun({ text: `Document ${i + 1}: ${file.name}`, bold: true, size: 28 })]
+      }));
       
-      pdf.setFontSize(10);
-      pdf.text(`File size: ${(files[i].size / 1024 / 1024).toFixed(2)} MB`, 25, currentY);
-      currentY += 10;
-      pdf.text(`Last modified: ${new Date(files[i].lastModified).toLocaleDateString()}`, 25, currentY);
-      currentY += 20;
+      allParagraphs.push(new Paragraph({
+        children: [new TextRun({ text: '\n' })]
+      }));
       
-      // Add separator
-      pdf.line(20, currentY, 190, currentY);
-      currentY += 15;
+      try {
+        // Extract text content using mammoth
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        const text = result.value;
+        
+        // Split text into paragraphs and add to document
+        const paragraphs = text.split('\n').filter(line => line.trim() !== '');
+        
+        for (const paragraphText of paragraphs) {
+          allParagraphs.push(new Paragraph({
+            children: [new TextRun({ text: paragraphText })]
+          }));
+        }
+      } catch (extractError) {
+        // If text extraction fails, add error message
+        allParagraphs.push(new Paragraph({
+          children: [new TextRun({ text: 'Error: Could not extract text from this document.', italics: true })]
+        }));
+      }
     }
     
-    pdf.save(`${fileName}_merged.pdf`);
+    // Create new DOCX document with merged content
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: allParagraphs
+      }]
+    });
+    
+    // Generate and download the merged DOCX
+    const buffer = await Packer.toBuffer(doc);
+    const blob = new Blob([buffer], { 
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
+    });
+    saveAs(blob, `${fileName}_merged.docx`);
+    
   } catch (error) {
     console.error('DOCX merge error:', error);
     throw new Error('Failed to merge DOCX files');
