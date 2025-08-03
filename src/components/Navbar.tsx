@@ -59,7 +59,7 @@ export const Navbar = () => {
                   // CORRECTED PART: Use NavigationMenuLink with asChild pointing to Link
                   <li key={item.path}> {/* Wrap in an li as NavigationMenuList expects li children */}
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                      <Link to={item.path}>
+                      <Link to={item.path} className="font-bold text-[brown]">
                         {item.name}
                       </Link>
                     </NavigationMenuLink>
@@ -98,7 +98,7 @@ export const Navbar = () => {
                     className="flex items-center space-x-3 px-4 py-3 hover:bg-white/10 transition-colors"
                   >
                     <item.icon className="w-5 h-5 text-saffron-deep" />
-                    <span className="text-foreground">{item.name}</span>
+                    <span className="text-foreground font-bold text-[brown]">{item.name}</span>
                   </Link>
                 ))}
               </div>

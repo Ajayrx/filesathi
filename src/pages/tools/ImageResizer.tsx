@@ -168,6 +168,9 @@ const ImageResizer = () => {
                   <SelectItem value="200">200 KB</SelectItem>
                   <SelectItem value="500">500 KB</SelectItem>
                   <SelectItem value="1000">1 MB</SelectItem>
+                  <SelectItem value="2000">2 MB</SelectItem>
+                  <SelectItem value="5000">5 MB</SelectItem>
+                  <SelectItem value="10000">10 MB</SelectItem>
                 </SelectContent>
               </Select>
             </div>

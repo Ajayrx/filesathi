@@ -122,9 +122,6 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
             }}
           />
           
-          <div className="text-xs text-muted-foreground">
-            Supports special characters: ₹ • ° • µ • © • ® • ™ • → • ← • ↑ • ↓
-          </div>
         </div>
       </Card>
     </motion.div>
