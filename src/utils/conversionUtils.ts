@@ -65,68 +65,152 @@ export const mergePdfFiles = async (files: File[], fileName: string): Promise<vo
 // DOCX Merger function - creates actual merged DOCX file
 export const mergeDocxFiles = async (files: File[], fileName: string): Promise<void> => {
   try {
-    const allParagraphs: Paragraph[] = [];
+    const allChildren: any[] = [];
     
-    // Extract text from each DOCX file
+    // Process each DOCX file
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const arrayBuffer = await file.arrayBuffer();
       
-      // Add document separator
+      // Add document separator if not first file
       if (i > 0) {
-        allParagraphs.push(new Paragraph({
-          children: [new TextRun({ text: '\n\n--- Document Separator ---\n\n', bold: true })]
-        }));
+        allChildren.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `\n--- End of ${files[i-1].name} ---\n`,
+                bold: true,
+                color: "666666"
+              })
+            ]
+          })
+        );
+        allChildren.push(
+          new Paragraph({
+            children: [new TextRun({ text: "" })] // Empty paragraph for spacing
+          })
+        );
       }
       
-      // Add document title
-      allParagraphs.push(new Paragraph({
-        children: [new TextRun({ text: `Document ${i + 1}: ${file.name}`, bold: true, size: 28 })]
-      }));
+      // Add document header
+      allChildren.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `Document ${i + 1}: ${file.name}`,
+              bold: true,
+              size: 32,
+              color: "000000"
+            })
+          ]
+        })
+      );
       
-      allParagraphs.push(new Paragraph({
-        children: [new TextRun({ text: '\n' })]
-      }));
+      allChildren.push(
+        new Paragraph({
+          children: [new TextRun({ text: "" })] // Empty paragraph for spacing
+        })
+      );
       
       try {
         // Extract text content using mammoth
         const result = await mammoth.extractRawText({ arrayBuffer });
+        
         const text = result.value;
         
-        // Split text into paragraphs and add to document
-        const paragraphs = text.split('\n').filter(line => line.trim() !== '');
-        
-        for (const paragraphText of paragraphs) {
-          allParagraphs.push(new Paragraph({
-            children: [new TextRun({ text: paragraphText })]
-          }));
+        if (text.trim()) {
+          // Split into paragraphs and preserve line breaks
+          const lines = text.split('\n');
+          
+          for (const line of lines) {
+            if (line.trim() === '') {
+              // Add empty paragraph for blank lines
+              allChildren.push(
+                new Paragraph({
+                  children: [new TextRun({ text: "" })]
+                })
+              );
+            } else {
+              // Add paragraph with content
+              allChildren.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: line.trim(),
+                      size: 24
+                    })
+                  ]
+                })
+              );
+            }
+          }
+        } else {
+          // If no text extracted, add placeholder
+          allChildren.push(
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "[This document appears to be empty or contains only images/tables]",
+                  italics: true,
+                  color: "888888"
+                })
+              ]
+            })
+          );
         }
       } catch (extractError) {
-        // If text extraction fails, add error message
-        allParagraphs.push(new Paragraph({
-          children: [new TextRun({ text: 'Error: Could not extract text from this document.', italics: true })]
-        }));
+        console.error(`Error extracting text from ${file.name}:`, extractError);
+        allChildren.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `[Error reading ${file.name}: ${extractError instanceof Error ? extractError.message : 'Unknown error'}]`,
+                italics: true,
+                color: "FF0000"
+              })
+            ]
+          })
+        );
       }
+      
+      // Add spacing after each document
+      allChildren.push(
+        new Paragraph({
+          children: [new TextRun({ text: "" })]
+        })
+      );
     }
     
-    // Create new DOCX document with merged content
+    // Create the merged document
     const doc = new Document({
-      sections: [{
-        properties: {},
-        children: allParagraphs
-      }]
+      sections: [
+        {
+          properties: {
+            page: {
+              margin: {
+                top: 1440,    // 1 inch
+                right: 1440,  // 1 inch  
+                bottom: 1440, // 1 inch
+                left: 1440    // 1 inch
+              }
+            }
+          },
+          children: allChildren
+        }
+      ]
     });
     
-    // Generate and download the merged DOCX
+    // Generate and save the document
     const buffer = await Packer.toBuffer(doc);
     const blob = new Blob([buffer], { 
       type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
     });
+    
     saveAs(blob, `${fileName}_merged.docx`);
     
   } catch (error) {
     console.error('DOCX merge error:', error);
-    throw new Error('Failed to merge DOCX files');
+    throw new Error(`Failed to merge DOCX files: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 
