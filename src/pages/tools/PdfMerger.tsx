@@ -81,7 +81,7 @@ const PdfMerger = () => {
       
       <div className="space-y-8">
         <Card className="p-6 bg-gradient-card border border-primary/10 shadow-warm">
-          <h2 className="text-xl font-bold text-foreground text-[#8B4513] mb-4">Upload PDF Files</h2>
+          <h2 className="text-xl font-bold text-foreground text-[brown] mb-4">Upload PDF Files</h2>
           
           <div className="space-y-4">
             <div className="border-2 border-dashed border-primary/20 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
@@ -157,7 +157,7 @@ const PdfMerger = () => {
 
         <Card className="p-6 bg-gradient-card border-0 shadow-soft">
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-foreground text-[#8B4513]">Name Your Merged PDF</h2>
+            <h2 className="text-xl font-bold text-foreground text-[brown]">Name Your Merged PDF</h2>
             
             <div className="relative">
               <Input

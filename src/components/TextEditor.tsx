@@ -54,7 +54,7 @@ export const TextEditor = ({ value, onChange, placeholder }: TextEditorProps) =>
         
         <div className="space-y-4 relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-4">
-            <h2 className="text-lg sm:text-xl font-bold text-foreground text-[#8B4513]">✍️ Content Editor / Paste Here</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-foreground text-[brown]">✍️ Content Editor / Paste Here</h2>
             <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground bg-saffron-light/20 px-2 sm:px-3 py-1 rounded-full">
               <span className="font-medium">{wordCount} words</span>
               <span className="font-medium">{charCount} characters</span>

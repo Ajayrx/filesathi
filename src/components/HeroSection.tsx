@@ -11,14 +11,14 @@ export const HeroSection = () => {
       </div>
 
       {/* Hero Content */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {/* Top Badges with Icons */}
         <div className="flex flex-wrap justify-center gap-4">
-          <div className="flex items-center gap-2 bg-card px-5 py-3 rounded-xl shadow-md text-saffron-deep font-medium text-sm">
+          <div className="flex items-center gap-2 bg-card px-5 py-3 rounded-xl shadow-md text-saffron-deep font-bold text-sm">
             <FileText className="w-5 h-5 text-saffron-deep" />
-            Academic Support
+            Ai Tools
           </div>
-          <div className="flex items-center gap-2 bg-card px-5 py-3 rounded-xl shadow-md text-saffron-deep font-medium text-sm">
+          <div className="flex items-center gap-2 bg-card px-5 py-3 rounded-xl shadow-md text-saffron-deep font-bold text-sm">
             <Download className="w-5 h-5 text-saffron-deep" />
             Instant Export
           </div>

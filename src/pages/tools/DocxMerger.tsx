@@ -80,7 +80,7 @@ const DocxMerger = () => {
       
       <div className="space-y-4 sm:space-y-8">
         <Card className="p-3 sm:p-6 bg-gradient-card border border-primary/10 shadow-warm">
-          <h2 className="text-lg sm:text-xl font-bold text-foreground text-[#8B4513] mb-3 sm:mb-4">Upload DOCX Files</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-foreground text-[brown] mb-3 sm:mb-4">Upload DOCX Files</h2>
           
           <div className="space-y-4">
             <div className="border-2 border-dashed border-primary/20 rounded-lg p-4 sm:p-8 text-center hover:border-primary/40 transition-colors">
@@ -136,7 +136,7 @@ const DocxMerger = () => {
 
         <Card className="p-3 sm:p-6 bg-gradient-card border-0 shadow-soft">
           <div className="space-y-3 sm:space-y-4">
-            <h2 className="text-lg sm:text-xl font-bold text-foreground text-[#8B4513]">Name Your Merged File</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-foreground text-[brown]">Name Your Merged File</h2>
             
             <div className="relative">
               <Input

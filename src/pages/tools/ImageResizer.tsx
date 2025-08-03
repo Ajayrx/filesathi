@@ -79,7 +79,7 @@ const ImageResizer = () => {
       
       <div className="space-y-8">
         <Card className="p-6 bg-gradient-card border border-primary/10 shadow-warm">
-          <h2 className="text-xl font-bold text-foreground text-[#8B4513] mb-4">Upload Image</h2>
+          <h2 className="text-xl font-bold text-foreground text-[brown] mb-4">Upload Image</h2>
           
           <div className="space-y-4">
             <div className="border-2 border-dashed border-primary/20 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
@@ -117,7 +117,7 @@ const ImageResizer = () => {
         </Card>
 
         <Card className="p-6 bg-gradient-card border border-primary/10 shadow-warm">
-          <h2 className="text-xl font-bold text-foreground text-[#8B4513] mb-4">Resize Settings</h2>
+          <h2 className="text-xl font-bold text-foreground text-[brown] mb-4">Resize Settings</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -180,7 +180,7 @@ const ImageResizer = () => {
 
         <Card className="p-6 bg-gradient-card border-0 shadow-soft">
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-foreground text-[#8B4513]">Output File Name</h2>
+            <h2 className="text-xl font-bold text-foreground text-[brown]">Output File Name</h2>
             
             <div className="relative">
               <Input
