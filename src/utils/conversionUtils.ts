@@ -200,12 +200,8 @@ export const mergeDocxFiles = async (files: File[], fileName: string): Promise<v
       ]
     });
     
-    // Generate and save the document
-    const buffer = await Packer.toBuffer(doc);
-    const blob = new Blob([buffer], { 
-      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
-    });
-    
+    // Generate and save the document using browser-compatible method
+    const blob = await Packer.toBlob(doc);
     saveAs(blob, `${fileName}_merged.docx`);
     
   } catch (error) {
