@@ -369,14 +369,21 @@ export const resizeImage = async (
   }
 };
 
-// Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+// Set up PDF.js worker - use the same version as the library
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url
+).toString();
 
 // PDF to DOCX conversion
 export const convertPdfToDocx = async (file: File, fileName: string): Promise<void> => {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const pdf = await pdfjsLib.getDocument({ 
+      data: arrayBuffer,
+      cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
+      cMapPacked: true,
+    }).promise;
     
     let extractedText = '';
     
@@ -385,15 +392,38 @@ export const convertPdfToDocx = async (file: File, fileName: string): Promise<vo
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
       
-      // Join text items with spaces and add page breaks
-      const pageText = textContent.items
-        .map((item: any) => item.str)
-        .join(' ');
+      // Better text extraction with positioning
+      let pageText = '';
+      let lastY = null;
       
-      extractedText += pageText + '\n\n';
+      for (const item of textContent.items as any[]) {
+        // Add line breaks for different y positions (new lines)
+        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+          pageText += '\n';
+        }
+        
+        pageText += item.str + ' ';
+        lastY = item.transform[5];
+      }
+      
+      extractedText += `Page ${pageNum}:\n${pageText.trim()}\n\n`;
     }
     
-    // Create DOCX document
+    // Create DOCX document with better formatting
+    const paragraphs = extractedText.split('\n').filter(line => line.trim()).map(line => 
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: line.trim(),
+            size: 24
+          })
+        ],
+        spacing: {
+          after: 120
+        }
+      })
+    );
+    
     const doc = new Document({
       sections: [
         {
@@ -407,16 +437,7 @@ export const convertPdfToDocx = async (file: File, fileName: string): Promise<vo
               }
             }
           },
-          children: extractedText.split('\n').map(line => 
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: line,
-                  size: 24
-                })
-              ]
-            })
-          )
+          children: paragraphs
         }
       ]
     });
@@ -434,7 +455,11 @@ export const convertPdfToDocx = async (file: File, fileName: string): Promise<vo
 export const convertPdfToText = async (file: File, fileName: string): Promise<void> => {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const pdf = await pdfjsLib.getDocument({ 
+      data: arrayBuffer,
+      cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
+      cMapPacked: true,
+    }).promise;
     
     let extractedText = '';
     
@@ -443,15 +468,24 @@ export const convertPdfToText = async (file: File, fileName: string): Promise<vo
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
       
-      // Join text items with spaces and add page breaks
-      const pageText = textContent.items
-        .map((item: any) => item.str)
-        .join(' ');
+      // Better text extraction with positioning
+      let pageText = '';
+      let lastY = null;
       
-      extractedText += `--- Page ${pageNum} ---\n${pageText}\n\n`;
+      for (const item of textContent.items as any[]) {
+        // Add line breaks for different y positions (new lines)
+        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+          pageText += '\n';
+        }
+        
+        pageText += item.str + ' ';
+        lastY = item.transform[5];
+      }
+      
+      extractedText += `--- Page ${pageNum} ---\n${pageText.trim()}\n\n`;
     }
     
-    const blob = new Blob([extractedText], { type: 'text/plain' });
+    const blob = new Blob([extractedText], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, `${fileName}.txt`);
     
   } catch (error) {
