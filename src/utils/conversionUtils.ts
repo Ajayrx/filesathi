@@ -369,21 +369,23 @@ export const resizeImage = async (
   }
 };
 
-// Set up PDF.js worker for Vite compatibility
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString();
+// Set up PDF.js worker using CDN for compatibility
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.54/pdf.worker.min.mjs`;
 
 // PDF to DOCX conversion
 export const convertPdfToDocx = async (file: File, fileName: string): Promise<void> => {
   try {
+    console.log('Starting PDF to DOCX conversion for:', file.name);
     const arrayBuffer = await file.arrayBuffer();
+    console.log('File loaded, size:', arrayBuffer.byteLength);
+    
     const pdf = await pdfjsLib.getDocument({ 
       data: arrayBuffer,
       cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
       cMapPacked: true,
     }).promise;
+    
+    console.log('PDF loaded, pages:', pdf.numPages);
     
     let extractedText = '';
     
@@ -454,12 +456,17 @@ export const convertPdfToDocx = async (file: File, fileName: string): Promise<vo
 // PDF to Text conversion
 export const convertPdfToText = async (file: File, fileName: string): Promise<void> => {
   try {
+    console.log('Starting PDF to Text conversion for:', file.name);
     const arrayBuffer = await file.arrayBuffer();
+    console.log('File loaded, size:', arrayBuffer.byteLength);
+    
     const pdf = await pdfjsLib.getDocument({ 
       data: arrayBuffer,
       cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
       cMapPacked: true,
     }).promise;
+    
+    console.log('PDF loaded, pages:', pdf.numPages);
     
     let extractedText = '';
     
