@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import mammoth from 'mammoth';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
+import * as pdfjsLib from 'pdfjs-dist';
 
 // DOCX to PDF conversion with actual text extraction
 export const convertDocxToPdf = async (file: File, fileName: string): Promise<void> => {
@@ -365,5 +366,96 @@ export const resizeImage = async (
   } catch (error) {
     console.error('Image resize error:', error);
     throw new Error('Failed to resize image');
+  }
+};
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+
+// PDF to DOCX conversion
+export const convertPdfToDocx = async (file: File, fileName: string): Promise<void> => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    
+    let extractedText = '';
+    
+    // Extract text from each page
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      
+      // Join text items with spaces and add page breaks
+      const pageText = textContent.items
+        .map((item: any) => item.str)
+        .join(' ');
+      
+      extractedText += pageText + '\n\n';
+    }
+    
+    // Create DOCX document
+    const doc = new Document({
+      sections: [
+        {
+          properties: {
+            page: {
+              margin: {
+                top: 1440,    // 1 inch
+                right: 1440,  // 1 inch  
+                bottom: 1440, // 1 inch
+                left: 1440    // 1 inch
+              }
+            }
+          },
+          children: extractedText.split('\n').map(line => 
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: line,
+                  size: 24
+                })
+              ]
+            })
+          )
+        }
+      ]
+    });
+    
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `${fileName}.docx`);
+    
+  } catch (error) {
+    console.error('PDF to DOCX conversion error:', error);
+    throw new Error('Failed to convert PDF to DOCX');
+  }
+};
+
+// PDF to Text conversion
+export const convertPdfToText = async (file: File, fileName: string): Promise<void> => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    
+    let extractedText = '';
+    
+    // Extract text from each page
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      
+      // Join text items with spaces and add page breaks
+      const pageText = textContent.items
+        .map((item: any) => item.str)
+        .join(' ');
+      
+      extractedText += `--- Page ${pageNum} ---\n${pageText}\n\n`;
+    }
+    
+    const blob = new Blob([extractedText], { type: 'text/plain' });
+    saveAs(blob, `${fileName}.txt`);
+    
+  } catch (error) {
+    console.error('PDF to Text conversion error:', error);
+    throw new Error('Failed to convert PDF to text');
   }
 };

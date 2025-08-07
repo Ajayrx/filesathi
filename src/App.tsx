@@ -14,6 +14,7 @@ import DocxToPdf from "./pages/tools/DocxToPdf";
 import PdfMerger from "./pages/tools/PdfMerger";
 import DocxMerger from "./pages/tools/DocxMerger";
 import ImageResizer from "./pages/tools/ImageResizer";
+import PdfToDocx from "./pages/tools/PdfToDocx";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/tools/pdf-merger" element={<PdfMerger />} />
             <Route path="/tools/docx-merger" element={<DocxMerger />} />
             <Route path="/tools/image-resizer" element={<ImageResizer />} />
+            <Route path="/tools/pdf-to-docx" element={<PdfToDocx />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <CookieBanner />

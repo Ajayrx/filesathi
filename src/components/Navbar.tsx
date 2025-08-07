@@ -28,11 +28,10 @@ export const Navbar = () => {
     { name: "Home", path: "/", icon: HomeIcon },
     { name: "Img to PDF", path: "/tools/image-to-pdf", icon: Image },
     { name: "DOCX to PDF", path: "/tools/docx-to-pdf", icon: FileDown },
+    { name: "PDF to DOCX", path: "/tools/pdf-to-docx", icon: BookText },
     { name: "PDF Merger", path: "/tools/pdf-merger", icon: Merge },
     { name: "DOCX Merger", path: "/tools/docx-merger", icon: Merge },
     { name: "Image Resizer", path: "/tools/image-resizer", icon: Settings },
-    
-    
   ];
 
   return (
