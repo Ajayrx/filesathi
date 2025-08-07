@@ -369,10 +369,11 @@ export const resizeImage = async (
   }
 };
 
-// Set up PDF.js worker - disable worker for Vite compatibility
-pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-// Disable worker to avoid loading issues in development
-pdfjsLib.GlobalWorkerOptions.workerPort = null;
+// Set up PDF.js worker for Vite compatibility
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).toString();
 
 // PDF to DOCX conversion
 export const convertPdfToDocx = async (file: File, fileName: string): Promise<void> => {
