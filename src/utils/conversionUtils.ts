@@ -369,11 +369,8 @@ export const resizeImage = async (
   }
 };
 
-// Set up PDF.js worker - use the same version as the library
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url
-).toString();
+// Set up PDF.js worker using CDN
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.54/build/pdf.worker.min.js`;
 
 // PDF to DOCX conversion
 export const convertPdfToDocx = async (file: File, fileName: string): Promise<void> => {
